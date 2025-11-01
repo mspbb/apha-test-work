@@ -13,8 +13,8 @@ export default async function Page() {
 	return (
 		<div className={styles.page}>
 			<main className={styles.main}>
-				<p className='mb-5'>Products Page</p>
-				<ProductList />
+				<p>Products Page</p>
+				<ProductList fruits={fruits}/>
 			</main>
 		</div>
 	);

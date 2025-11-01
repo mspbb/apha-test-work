@@ -1,7 +1,10 @@
-import { fetchFruits } from '@/app/api/data';
-import PorductItem from '@/app/ui/product-item';
+'use client'
 
-type fruityvice = {
+import PorductItem from '@/app/ui/product-item';
+import { useAppSelector } from '@/app/store/hooks';
+import { useState } from 'react';
+
+export type Tfruits = {
 	'name': string;
 	'id': number;
 	'family': string,
@@ -14,18 +17,44 @@ type fruityvice = {
 		'carbohydrates': number,
 		'protein': number
 	}
-};
+}[]
 
-export default async function ProductList() {
-	const fruits = await fetchFruits();
+export default function ProductList({ fruits }: { fruits: Tfruits }) {
+	const likesArray = useAppSelector((state) => state.likes.items);
+	const removedArray = useAppSelector((state) => state.removed.items);
+	const [showLikedFruits, setShowLikedFruits] = useState(false);
+	const filtredFruits = fruits.filter(item => {
+		if (!removedArray.includes(item.id)) {
+			return item;
+		}
+	});
 
 	return (
-		<div className='flex-col flex gap-5'>
+		<div className='flex-col flex gap-5 w-[200px]'>
+			<button
+				className={`${showLikedFruits ? 'bg-amber-400' : 'bg-amber-100'}` + ' rounded-xl'}
+				onClick={() => {
+					setShowLikedFruits(!showLikedFruits);
+				}}
+			>
+				show liked fruits
+			</button>
 			{
-				fruits?.map((fruit: fruityvice) => {
-					return (
-						<PorductItem fruit={fruit} key={fruit.id}/>
-					)
+				filtredFruits?.map((fruit: Tfruits[0]) => {
+					let liked = false;
+
+					if (likesArray.includes(fruit.id)) {
+						liked = true;
+					}
+					if (!showLikedFruits) {
+						return (
+							<PorductItem fruit={fruit} key={fruit.id} liked={liked} />
+						)
+					} else if (likesArray.includes(fruit.id)) {
+						return (
+							<PorductItem fruit={fruit} key={fruit.id} liked={liked} />
+						)
+					}
 				})
 			}
 		</div>

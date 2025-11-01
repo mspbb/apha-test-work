@@ -1,10 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
-import counterReducer from '@/app/providers/counterSlice'
+import likesSlice from '@/app/providers/likesSlice'
+import removeSlice from '@/app/providers/removeSlice';
+import addFruitSlice from '@/app/providers/addFruitSlice';
 
 export const makeStore = () => {
 	return configureStore({
 		reducer: {
-			counter: counterReducer,
+			likes: likesSlice,
+			removed: removeSlice,
+			addFruit: addFruitSlice,
 		},
 	})
 }

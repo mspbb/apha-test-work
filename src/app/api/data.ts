@@ -16,7 +16,6 @@ export async function fetchFruit(id: number) {
 	try {
 		const response = await fetch(FRUITS_URL + id, { 'method': 'GET' });
 		let parsed = await response.json();
-		console.log(parsed);
 		return parsed;
 	} catch (error) {
 		console.error('Error:', error);

@@ -1,28 +1,22 @@
 'use client'
 
+import { useAppDispatch } from '@/app/store/hooks';
 import Link from 'next/link';
+import { Tfruits } from '@/app/ui/product-list'
+import { like } from '@/app/providers/likesSlice';
+import { remove } from '@/app/providers/removeSlice';
 
-type fruityvice = {
-	'fruit': {
-		'name': string;
-		'id': number;
-		'family': string,
-		'order': string,
-		'genus': string,
-		'nutritions': {
-			'calories': number,
-			'fat': number,
-			'sugar': number,
-			'carbohydrates': number,
-			'protein': number
-		}
-	}
-};
-
-export default function PorductItem({ fruit }: fruityvice) {
-	function hundlerClick(e: any) {
+export default function PorductItem(props: { fruit: Tfruits[0], liked: boolean }) {
+	const { fruit, liked } = props;
+	const dispatch = useAppDispatch();
+	function hundlerClickLike(e: any) {
+		dispatch(like(fruit.id));
 		e.preventDefault();
-		console.log('click');
+	};
+
+	function hundlerClickRemove(e: any) {
+		dispatch(remove(fruit.id));
+		e.preventDefault();
 	};
 
 	return (
@@ -30,11 +24,16 @@ export default function PorductItem({ fruit }: fruityvice) {
 			href={`/products/${fruit.id}/`}
 			className='rounded-md border p-2 hover:bg-gray-100'
 		>
-			{fruit.name}
-			<br />
-			<button onClick={hundlerClick}>like</button>
-			<br />
-			<button onClick={hundlerClick}>remove</button>
+			<div>
+				<p>{fruit.name}</p>
+				<br />
+				<button
+					onClick={hundlerClickLike}
+					className={`${liked ? 'bg-amber-200' : ''}`}
+				>like</button>
+				<br />
+				<button onClick={hundlerClickRemove}>remove</button>
+			</div>
 		</Link>
 	)
 }
