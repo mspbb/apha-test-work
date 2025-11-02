@@ -5,9 +5,10 @@ export default function FruitCard({ props }: any) {
 		<div>
 			<div>{props.name}</div>
 			<div>{props.family}</div>
-			<div>{props.genus}</div>
+			<div className='mb-5'>{props.genus}</div>
 			<Link
 				href={'/products'}
+				className='bg-amber-400 p-2 rounded-xl'
 			>
 				back
 			</Link>

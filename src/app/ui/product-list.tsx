@@ -3,6 +3,8 @@
 import PorductItem from '@/app/ui/product-item';
 import { useAppSelector } from '@/app/store/hooks';
 import { useState } from 'react';
+import Pagination from '@/app/ui/pagination';
+import { useSearchParams } from 'next/navigation';
 
 export type Tfruits = {
 	'name': string;
@@ -29,34 +31,51 @@ export default function ProductList({ fruits }: { fruits: Tfruits }) {
 		}
 	});
 
+	const searchParams = useSearchParams();
+	const currentPage = Number(searchParams.get('page')) || 1;
+
+	const TOTAL_FRUITS_PER_PAGE = 5;
+	const numbersOfFruits = filtredFruits.length;
+	const totalPages = Math.ceil(numbersOfFruits / TOTAL_FRUITS_PER_PAGE);
+
+	const getFruitsForCurrentPage = (fruits: Tfruits, page: number): Tfruits => {
+		const start = page * TOTAL_FRUITS_PER_PAGE - TOTAL_FRUITS_PER_PAGE;
+		const end = page * TOTAL_FRUITS_PER_PAGE;
+
+		return fruits.slice(start, end);
+	}
+
 	return (
 		<div className='flex-col flex gap-5 w-[200px]'>
 			<button
-				className={`${showLikedFruits ? 'bg-amber-400' : 'bg-amber-100'}` + ' rounded-xl'}
+				className={`${showLikedFruits ? 'bg-amber-400' : 'bg-amber-100'}` + ' rounded-xl hover:scale-110'}
 				onClick={() => {
 					setShowLikedFruits(!showLikedFruits);
 				}}
 			>
 				show liked fruits
 			</button>
-			{
-				filtredFruits?.map((fruit: Tfruits[0]) => {
-					let liked = false;
+			<div>
+				{
+					getFruitsForCurrentPage(filtredFruits, currentPage)?.map((fruit: Tfruits[0]) => {
+						let liked = false;
 
-					if (likesArray.includes(fruit.id)) {
-						liked = true;
-					}
-					if (!showLikedFruits) {
-						return (
-							<PorductItem fruit={fruit} key={fruit.id} liked={liked} />
-						)
-					} else if (likesArray.includes(fruit.id)) {
-						return (
-							<PorductItem fruit={fruit} key={fruit.id} liked={liked} />
-						)
-					}
-				})
-			}
+						if (likesArray.includes(fruit.id)) {
+							liked = true;
+						}
+						if (!showLikedFruits) {
+							return (
+								<PorductItem fruit={fruit} key={fruit.id} liked={liked} />
+							)
+						} else if (likesArray.includes(fruit.id)) {
+							return (
+								<PorductItem fruit={fruit} key={fruit.id} liked={liked} />
+							)
+						}
+					})
+				}
+			</div>
+			<Pagination totalPages={totalPages} />
 		</div>
 	);
 }

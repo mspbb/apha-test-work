@@ -22,17 +22,21 @@ export default function PorductItem(props: { fruit: Tfruits[0], liked: boolean }
 	return (
 		<Link
 			href={`/products/${fruit.id}/`}
-			className='rounded-md border p-2 hover:bg-gray-100'
+			className='rounded-md border p-2 hover:bg-gray-100 block'
 		>
 			<div>
 				<p>{fruit.name}</p>
 				<br />
 				<button
 					onClick={hundlerClickLike}
-					className={`${liked ? 'bg-amber-200' : ''}`}
+					className={`${liked ? 'bg-amber-200' : ''} hover:scale-110`}
 				>like</button>
 				<br />
-				<button onClick={hundlerClickRemove}>remove</button>
+				<button
+					onClick={hundlerClickRemove}
+					className='hover:scale-110'
+				>
+					remove</button>
 			</div>
 		</Link>
 	)
