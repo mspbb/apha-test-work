@@ -16,6 +16,7 @@ export const addFruitSlice = createSlice({
 	initialState,
 	reducers: {
 		addFruit: (state, action: PayloadAction<{}>) => {
+			/* @ts-ignore */
 			state.item = action.payload;
 		}
 	},

@@ -5,6 +5,7 @@ import { useAppSelector } from '@/app/store/hooks';
 import { useState } from 'react';
 import Pagination from '@/app/ui/pagination';
 import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react'
 
 export type Tfruits = {
 	'name': string;
@@ -55,27 +56,29 @@ export default function ProductList({ fruits }: { fruits: Tfruits }) {
 			>
 				show liked fruits
 			</button>
-			<div>
-				{
-					getFruitsForCurrentPage(filtredFruits, currentPage)?.map((fruit: Tfruits[0]) => {
-						let liked = false;
+			<Suspense fallback={<>...</>}>
+				<div>
+					{
+						getFruitsForCurrentPage(filtredFruits, currentPage)?.map((fruit: Tfruits[0]) => {
+							let liked = false;
 
-						if (likesArray.includes(fruit.id)) {
-							liked = true;
-						}
-						if (!showLikedFruits) {
-							return (
-								<PorductItem fruit={fruit} key={fruit.id} liked={liked} />
-							)
-						} else if (likesArray.includes(fruit.id)) {
-							return (
-								<PorductItem fruit={fruit} key={fruit.id} liked={liked} />
-							)
-						}
-					})
-				}
-			</div>
-			<Pagination totalPages={totalPages} />
+							if (likesArray.includes(fruit.id)) {
+								liked = true;
+							}
+							if (!showLikedFruits) {
+								return (
+									<PorductItem fruit={fruit} key={fruit.id} liked={liked} />
+								)
+							} else if (likesArray.includes(fruit.id)) {
+								return (
+									<PorductItem fruit={fruit} key={fruit.id} liked={liked} />
+								)
+							}
+						})
+					}
+				</div>
+				<Pagination totalPages={totalPages} />
+			</Suspense>
 		</div>
 	);
 }
