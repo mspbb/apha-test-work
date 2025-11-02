@@ -1,7 +1,20 @@
 
 import styles from '@/app/page.module.css';
 import FruitCard from '@/app/ui/fruit-card';
-import { fetchFruit } from '@/app/api/data';
+import { fetchFruit, fetchFruits } from '@/app/api/data';
+
+async function getProductIds(): Promise<string[]> {
+	return await fetchFruits();
+}
+
+export async function generateStaticParams() {
+	const productIds = await getProductIds();
+
+	return productIds.map((obj) => {
+		/* @ts-ignore */
+		return { id: obj.id.toString() }
+	});
+}
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
 	const params = await props.params;
