@@ -54,7 +54,6 @@ export default function Form() {
 
 		try {
 			dispatch(addFruit(createdFruit));
-			console.log('ok');
 		} catch (error) {
 			return {
 				message: 'Error: Failed to Create Product.',
